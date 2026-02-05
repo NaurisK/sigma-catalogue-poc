@@ -26,7 +26,7 @@ async function main() {
       checkbox.type = "checkbox";
       checkbox.name = name;
       checkbox.value = val;
-      checkbox.checked = true; // All checked by default
+      checkbox.checked = false; // All un-checked by default
       
       label.appendChild(checkbox);
       label.appendChild(document.createTextNode(" " + val));
