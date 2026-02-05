@@ -188,6 +188,37 @@ header h1 {
   border-color: #0066cc;
 }
 
+/* Color coding for product vs service */
+.checkbox-product {
+  background: #e8f5e9;
+  border-color: #4caf50;
+}
+
+.checkbox-product:hover {
+  background: #c8e6c9;
+}
+
+.checkbox-product:has(input:checked) {
+  background: #4caf50;
+  color: white;
+  border-color: #4caf50;
+}
+
+.checkbox-service {
+  background: #fff3e0;
+  border-color: #ff9800;
+}
+
+.checkbox-service:hover {
+  background: #ffe0b2;
+}
+
+.checkbox-service:has(input:checked) {
+  background: #ff9800;
+  color: white;
+  border-color: #ff9800;
+}
+
 .checkbox-label input[type="checkbox"] {
   margin: 0 6px 0 0;
   cursor: pointer;
@@ -268,6 +299,16 @@ header h1 {
 
 .badge-informational {
   background: #17a2b8;
+  color: white;
+}
+
+.badge-product {
+  background: #4caf50;
+  color: white;
+}
+
+.badge-service {
+  background: #ff9800;
   color: white;
 }
 
