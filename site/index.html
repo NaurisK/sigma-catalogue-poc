@@ -8,12 +8,22 @@
 </head>
 <body>
   <h1>Sigma Rules Catalogue PoC</h1>
-
+  
   <div class="filters">
     <input id="q" placeholder="Search title, tags, logsource..." />
-    <select id="product"><option value="">product: any</option></select>
-    <select id="category"><option value="">category: any</option></select>
-    <select id="level"><option value="">level: any</option></select>
+    <div class="facet">
+      <div class="facet-title">Product</div>
+      <div id="productFacet" class="facet-options"></div>
+    </div>
+    <div class="facet">
+      <div class="facet-title">Category</div>
+      <div id="categoryFacet" class="facet-options"></div>
+    </div>
+    <div class="facet">
+      <div class="facet-title">Level</div>
+      <div id="levelFacet" class="facet-options"></div>
+    </div>
+    <button id="clear">Clear filters</button>
   </div>
 
   <div id="stats"></div>
