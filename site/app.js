@@ -42,7 +42,7 @@ async function main() {
 
   function render(list) {
     els.stats.textContent = `${list.length} rules`;
-    els.results.innerHTML = list.slice(0, 200).map(r => `
+    els.results.innerHTML = list.slice(0, 3000).map(r => `
       <div class="card">
         <div class="title"><a href="${r.url}" target="_blank" rel="noreferrer">${escapeHtml(r.title)}</a></div>
         <div class="meta">
