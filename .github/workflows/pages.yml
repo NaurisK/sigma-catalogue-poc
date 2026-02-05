@@ -43,7 +43,9 @@ jobs:
 
       - name: Prepare Pages artifact
         run: |
-          cp -r site public
+          rm -rf public
+          mkdir -p public
+          cp -r site/* public/
           touch public/.nojekyll
 
       - name: Upload artifact
