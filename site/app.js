@@ -26,7 +26,7 @@ async function main() {
       checkbox.type = "checkbox";
       checkbox.name = name;
       checkbox.value = val;
-      checkbox.checked = false; // All un-checked by default
+      checkbox.checked = true; // Start with all checked
       
       label.appendChild(checkbox);
       label.appendChild(document.createTextNode(" " + val));
@@ -40,18 +40,46 @@ async function main() {
   createCheckboxes(els.categoryFilters, categories, "category");
   createCheckboxes(els.levelFilters, levels, "level");
 
+  // Handle select all/none buttons
+  document.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const action = e.target.dataset.action;
+      const target = e.target.dataset.target;
+      const checkboxes = document.querySelectorAll(`input[name="${target}"]`);
+      
+      checkboxes.forEach(cb => {
+        cb.checked = action === 'select-all';
+      });
+      
+      apply();
+    });
+  });
+
   function render(list) {
-    els.stats.textContent = `${list.length} rules`;
-    els.results.innerHTML = list.slice(0, 3000).map(r => `
+    const total = list.length;
+    const shown = Math.min(total, 200);
+    
+    els.stats.innerHTML = `
+      <strong>${total.toLocaleString()}</strong> rules found
+      ${total > 200 ? `<span class="note">(showing first ${shown})</span>` : ''}
+    `;
+    
+    els.results.innerHTML = list.slice(0, 200).map(r => `
       <div class="card">
-        <div class="title"><a href="${r.url}" target="_blank" rel="noreferrer">${escapeHtml(r.title)}</a></div>
-        <div class="meta">
-          <span>${escapeHtml(r.level || "")}</span>
-          <span>${escapeHtml(r.status || "")}</span>
-          <span>${escapeHtml(r.logsource_product || "")}</span>
-          <span>${escapeHtml(r.logsource_category || "")}</span>
+        <div class="title">
+          <a href="${r.url}" target="_blank" rel="noreferrer">${escapeHtml(r.title)}</a>
         </div>
-        <div class="tags">${(r.tags || []).slice(0, 8).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("")}</div>
+        <div class="meta">
+          ${r.level ? `<span class="badge badge-${r.level}">${escapeHtml(r.level)}</span>` : ''}
+          ${r.status ? `<span class="badge">${escapeHtml(r.status)}</span>` : ''}
+          ${r.logsource_product ? `<span class="badge">${escapeHtml(r.logsource_product)}</span>` : ''}
+          ${r.logsource_category ? `<span class="badge">${escapeHtml(r.logsource_category)}</span>` : ''}
+        </div>
+        ${r.tags && r.tags.length > 0 ? `
+          <div class="tags">
+            ${r.tags.slice(0, 8).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("")}
+          </div>
+        ` : ''}
       </div>
     `).join("");
   }
@@ -74,17 +102,18 @@ async function main() {
     const selectedLevels = getCheckedValues("level");
 
     const filtered = rules.filter(r => {
-      // If checkboxes exist AND at least one is selected, filter by selection
-      // If none are selected, show all (don't filter)
+      // If none selected, show all; otherwise filter by selection
       if (selectedProducts.length > 0 && r.logsource_product && !selectedProducts.includes(r.logsource_product)) return false;
       if (selectedCategories.length > 0 && r.logsource_category && !selectedCategories.includes(r.logsource_category)) return false;
       if (selectedLevels.length > 0 && r.level && !selectedLevels.includes(r.level)) return false;
 
       if (!q) return true;
+      
       const hay = [
         r.title, r.status, r.level, r.logsource_product, r.logsource_category,
         ...(r.tags || [])
       ].join(" ").toLowerCase();
+      
       return hay.includes(q);
     });
 
