@@ -4,37 +4,21 @@ async function main() {
 
   const els = {
     q: document.getElementById("q"),
-    product: document.getElementById("product"),
-    category: document.getElementById("category"),
-    level: document.getElementById("level"),
+    productFacet: document.getElementById("productFacet"),
+    categoryFacet: document.getElementById("categoryFacet"),
+    levelFacet: document.getElementById("levelFacet"),
+    clear: document.getElementById("clear"),
     results: document.getElementById("results"),
     stats: document.getElementById("stats"),
   };
 
   const uniq = (arr) => [...new Set(arr.filter(Boolean))].sort();
-  const products = uniq(rules.map(r => r.logsource_product));
-  const categories = uniq(rules.map(r => r.logsource_category));
-  const levels = uniq(rules.map(r => r.level));
 
-  for (const p of products) els.product.add(new Option(p, p));
-  for (const c of categories) els.category.add(new Option(c, c));
-  for (const l of levels) els.level.add(new Option(l, l));
-
-  function render(list) {
-    els.stats.textContent = `${list.length} rules`;
-    els.results.innerHTML = list.slice(0, 200).map(r => `
-      <div class="card">
-        <div class="title"><a href="${r.url}" target="_blank" rel="noreferrer">${escapeHtml(r.title)}</a></div>
-        <div class="meta">
-          <span>${escapeHtml(r.level || "")}</span>
-          <span>${escapeHtml(r.status || "")}</span>
-          <span>${escapeHtml(r.logsource_product || "")}</span>
-          <span>${escapeHtml(r.logsource_category || "")}</span>
-        </div>
-        <div class="tags">${(r.tags || []).slice(0, 8).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("")}</div>
-      </div>
-    `).join("");
-  }
+  const values = {
+    product: uniq(rules.map(r => r.logsource_product)),
+    category: uniq(rules.map(r => r.logsource_category)),
+    level: uniq(rules.map(r => r.level)),
+  };
 
   function escapeHtml(s) {
     return (s ?? "").toString().replace(/[&<>"']/g, m => ({
@@ -42,17 +26,63 @@ async function main() {
     }[m]));
   }
 
+  // Build a checkbox facet. Returns a function that reads checked values as a Set.
+  function buildFacet(container, name, options) {
+    container.innerHTML = options.map(v => {
+      const id = `${name}_${v}`.replace(/[^a-zA-Z0-9_-]/g, "_");
+      return `
+        <label>
+          <input type="checkbox" data-facet="${name}" value="${escapeHtml(v)}" id="${id}">
+          <span>${escapeHtml(v)}</span>
+        </label>
+      `;
+    }).join("");
+
+    return () => {
+      const checked = [...container.querySelectorAll('input[type="checkbox"]:checked')];
+      return new Set(checked.map(x => x.value));
+    };
+  }
+
+  const getCheckedProducts = buildFacet(els.productFacet, "product", values.product);
+  const getCheckedCategories = buildFacet(els.categoryFacet, "category", values.category);
+  const getCheckedLevels = buildFacet(els.levelFacet, "level", values.level);
+
+  function render(list) {
+    els.stats.textContent = `${list.length} rules`;
+    els.results.innerHTML = list.slice(0, 200).map(r => `
+      <div class="card">
+        <div class="title">
+          <a href="${r.url}" target="_blank" rel="noreferrer">${escapeHtml(r.title)}</a>
+        </div>
+        <div class="meta">
+          <span>${escapeHtml(r.level || "")}</span>
+          <span>${escapeHtml(r.status || "")}</span>
+          <span>${escapeHtml(r.logsource_product || "")}</span>
+          <span>${escapeHtml(r.logsource_category || "")}</span>
+        </div>
+        <div class="tags">${
+          (r.tags || []).slice(0, 8).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("")
+        }</div>
+      </div>
+    `).join("");
+  }
+
   function apply() {
     const q = els.q.value.trim().toLowerCase();
-    const product = els.product.value;
-    const category = els.category.value;
-    const level = els.level.value;
+
+    const products = getCheckedProducts();
+    const categories = getCheckedCategories();
+    const levels = getCheckedLevels();
 
     const filtered = rules.filter(r => {
-      if (product && r.logsource_product !== product) return false;
-      if (category && r.logsource_category !== category) return false;
-      if (level && r.level !== level) return false;
+      // Multi-select facets:
+      // If nothing checked in a facet, treat as "any".
+      if (products.size && !products.has(r.logsource_product || "")) return false;
+      if (categories.size && !categories.has(r.logsource_category || "")) return false;
+      if (levels.size && !levels.has(r.level || "")) return false;
 
+      // Full text search
       if (!q) return true;
       const hay = [
         r.title, r.status, r.level, r.logsource_product, r.logsource_category,
@@ -64,15 +94,24 @@ async function main() {
     render(filtered);
   }
 
-  ["input","change"].forEach(evt => {
-    els.q.addEventListener(evt, apply);
-    els.product.addEventListener(evt, apply);
-    els.category.addEventListener(evt, apply);
-    els.level.addEventListener(evt, apply);
-  });
+  // Recompute when typing or ticking boxes
+  els.q.addEventListener("input", apply);
+  for (const c of [els.productFacet, els.categoryFacet, els.levelFacet]) {
+    c.addEventListener("change", apply);
+  }
+
+  // Optional clear button
+  if (els.clear) {
+    els.clear.addEventListener("click", () => {
+      els.q.value = "";
+      for (const cb of document.querySelectorAll('input[type="checkbox"][data-facet]')) {
+        cb.checked = false;
+      }
+      apply();
+    });
+  }
 
   apply();
 }
 
 main();
-
