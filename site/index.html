@@ -8,28 +8,36 @@
 </head>
 <body>
   <h1>Sigma Rules Catalogue PoC</h1>
-  
-  <div class="filters">
+
+  <div class="toolbar">
     <input id="q" placeholder="Search title, tags, logsource..." />
-    <div class="facet">
-      <div class="facet-title">Product</div>
-      <div id="productFacet" class="facet-options"></div>
-    </div>
-    <div class="facet">
-      <div class="facet-title">Category</div>
-      <div id="categoryFacet" class="facet-options"></div>
-    </div>
-    <div class="facet">
-      <div class="facet-title">Level</div>
-      <div id="levelFacet" class="facet-options"></div>
-    </div>
-    <button id="clear">Clear filters</button>
+    <button id="clear" type="button">Clear filters</button>
   </div>
 
-  <div id="stats"></div>
-  <div id="results"></div>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="facet">
+        <div class="facet-title">Product</div>
+        <div id="productFacet" class="facet-options"></div>
+      </div>
+
+      <div class="facet">
+        <div class="facet-title">Category</div>
+        <div id="categoryFacet" class="facet-options"></div>
+      </div>
+
+      <div class="facet">
+        <div class="facet-title">Level</div>
+        <div id="levelFacet" class="facet-options"></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div id="stats"></div>
+      <div id="results"></div>
+    </main>
+  </div>
 
   <script src="app.js"></script>
 </body>
 </html>
-
