@@ -9,34 +9,29 @@
 <body>
   <h1>Sigma Rules Catalogue PoC</h1>
 
-  <div class="toolbar">
-    <input id="q" placeholder="Search title, tags, logsource..." />
-    <button id="clear" type="button">Clear filters</button>
+  <div class="filters">
+    <div class="search-box">
+      <input id="q" placeholder="Search title, tags, logsource..." />
+    </div>
+    
+    <div class="filter-group">
+      <strong>Product:</strong>
+      <div id="product-filters" class="checkbox-group"></div>
+    </div>
+    
+    <div class="filter-group">
+      <strong>Category:</strong>
+      <div id="category-filters" class="checkbox-group"></div>
+    </div>
+    
+    <div class="filter-group">
+      <strong>Level:</strong>
+      <div id="level-filters" class="checkbox-group"></div>
+    </div>
   </div>
 
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="facet">
-        <div class="facet-title">Product</div>
-        <div id="productFacet" class="facet-options"></div>
-      </div>
-
-      <div class="facet">
-        <div class="facet-title">Category</div>
-        <div id="categoryFacet" class="facet-options"></div>
-      </div>
-
-      <div class="facet">
-        <div class="facet-title">Level</div>
-        <div id="levelFacet" class="facet-options"></div>
-      </div>
-    </aside>
-
-    <main class="main">
-      <div id="stats"></div>
-      <div id="results"></div>
-    </main>
-  </div>
+  <div id="stats"></div>
+  <div id="results"></div>
 
   <script src="app.js"></script>
 </body>
