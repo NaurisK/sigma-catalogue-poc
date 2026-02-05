@@ -21,49 +21,62 @@
   <details class="filter-section" open>
     <summary>Filters</summary>
     <div class="filters">
-      <div class="filter-group">
-        <div class="filter-header">
-          <strong>Product / Service</strong>
-          <div class="filter-controls">
-            <button class="btn-small" data-action="select-all" data-target="product-service">All</button>
-            <button class="btn-small" data-action="select-none" data-target="product-service">None</button>
-          </div>
-        </div>
-        <div id="product-service-filters" class="checkbox-group"></div>
-      </div>
       
-      <div class="filter-group">
-        <div class="filter-header">
+      <details class="filter-subsection" open>
+        <summary class="filter-subsection-summary">
+          <strong>Product</strong>
+          <div class="filter-controls">
+            <button class="btn-small" data-action="select-all" data-target="product">All</button>
+            <button class="btn-small" data-action="select-none" data-target="product">None</button>
+          </div>
+        </summary>
+        <div id="product-filters" class="checkbox-group"></div>
+      </details>
+
+      <details class="filter-subsection" open>
+        <summary class="filter-subsection-summary">
+          <strong>Service</strong>
+          <div class="filter-controls">
+            <button class="btn-small" data-action="select-all" data-target="service">All</button>
+            <button class="btn-small" data-action="select-none" data-target="service">None</button>
+          </div>
+        </summary>
+        <div id="service-filters" class="checkbox-group"></div>
+      </details>
+      
+      <details class="filter-subsection" open>
+        <summary class="filter-subsection-summary">
           <strong>Category</strong>
           <div class="filter-controls">
             <button class="btn-small" data-action="select-all" data-target="category">All</button>
             <button class="btn-small" data-action="select-none" data-target="category">None</button>
           </div>
-        </div>
+        </summary>
         <div id="category-filters" class="checkbox-group"></div>
-      </div>
+      </details>
       
-      <div class="filter-group">
-        <div class="filter-header">
+      <details class="filter-subsection" open>
+        <summary class="filter-subsection-summary">
           <strong>Level</strong>
           <div class="filter-controls">
             <button class="btn-small" data-action="select-all" data-target="level">All</button>
             <button class="btn-small" data-action="select-none" data-target="level">None</button>
           </div>
-        </div>
+        </summary>
         <div id="level-filters" class="checkbox-group"></div>
-      </div>
+      </details>
 
-      <div class="filter-group">
-        <div class="filter-header">
+      <details class="filter-subsection" open>
+        <summary class="filter-subsection-summary">
           <strong>Tags</strong>
           <div class="filter-controls">
             <button class="btn-small" data-action="select-all" data-target="tag">All</button>
             <button class="btn-small" data-action="select-none" data-target="tag">None</button>
           </div>
-        </div>
+        </summary>
         <div id="tag-filters" class="checkbox-group"></div>
-      </div>
+      </details>
+
     </div>
   </details>
 
