@@ -34,7 +34,8 @@ def main():
             continue
 
         logsource = doc.get("logsource") or {}
-        rel_path = p.as_posix()
+        # Get relative path from the rules directory
+        rel_path = p.relative_to(rules_dir.parent).as_posix()
 
         docs.append({
             "title": title,
@@ -55,4 +56,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
