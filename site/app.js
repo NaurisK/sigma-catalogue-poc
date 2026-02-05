@@ -36,7 +36,7 @@ async function main() {
       checkbox.type = "checkbox";
       checkbox.name = name;
       checkbox.value = val;
-      checkbox.checked = true;
+      checkbox.checked = false;
       
       label.appendChild(checkbox);
       label.appendChild(document.createTextNode(" " + val));
