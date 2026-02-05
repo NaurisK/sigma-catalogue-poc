@@ -108,27 +108,48 @@ header h1 {
 .filters { 
   padding: 20px;
   display: grid;
-  gap: 24px;
+  gap: 16px;
 }
 
-.filter-group {
-  border-bottom: 1px solid #e9ecef;
-  padding-bottom: 16px;
+/* Subsection filters (collapsible individual filters) */
+.filter-subsection {
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
-.filter-group:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.filter-header {
+.filter-subsection-summary {
+  padding: 10px 12px;
+  cursor: pointer;
+  background: #f8f9fa;
+  user-select: none;
+  list-style: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
 }
 
-.filter-header strong {
+.filter-subsection-summary::-webkit-details-marker {
+  display: none;
+}
+
+.filter-subsection-summary::before {
+  content: '▼';
+  margin-right: 8px;
+  transition: transform 0.2s;
+  display: inline-block;
+  font-size: 0.7rem;
+}
+
+.filter-subsection:not([open]) .filter-subsection-summary::before {
+  transform: rotate(-90deg);
+}
+
+.filter-subsection-summary:hover {
+  background: #e9ecef;
+}
+
+.filter-subsection-summary strong {
   font-size: 0.95rem;
   color: #495057;
   text-transform: uppercase;
@@ -163,6 +184,8 @@ header h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  padding: 12px;
+  background: white;
 }
 
 .checkbox-label {
@@ -338,14 +361,6 @@ header h1 {
     font-size: 1.5rem;
   }
   
-  .filter-header {
+  .filter-subsection-summary {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
-  }
-  
-  .checkbox-label {
-    font-size: 0.85rem;
-    padding: 5px 10px;
-  }
-}
