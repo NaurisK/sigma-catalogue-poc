@@ -1,1 +1,25 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sigma Rules Catalogue PoC</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Sigma Rules Catalogue PoC</h1>
+
+  <div class="filters">
+    <input id="q" placeholder="Search title, tags, logsource..." />
+    <select id="product"><option value="">product: any</option></select>
+    <select id="category"><option value="">category: any</option></select>
+    <select id="level"><option value="">level: any</option></select>
+  </div>
+
+  <div id="stats"></div>
+  <div id="results"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
 
