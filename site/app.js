@@ -74,10 +74,11 @@ async function main() {
     const selectedLevels = getCheckedValues("level");
 
     const filtered = rules.filter(r => {
-      // If checkboxes exist but none are selected, show nothing for that filter
-      if (selectedProducts.length > 0 && !selectedProducts.includes(r.logsource_product)) return false;
-      if (selectedCategories.length > 0 && !selectedCategories.includes(r.logsource_category)) return false;
-      if (selectedLevels.length > 0 && !selectedLevels.includes(r.level)) return false;
+      // If checkboxes exist AND at least one is selected, filter by selection
+      // If none are selected, show all (don't filter)
+      if (selectedProducts.length > 0 && r.logsource_product && !selectedProducts.includes(r.logsource_product)) return false;
+      if (selectedCategories.length > 0 && r.logsource_category && !selectedCategories.includes(r.logsource_category)) return false;
+      if (selectedLevels.length > 0 && r.level && !selectedLevels.includes(r.level)) return false;
 
       if (!q) return true;
       const hay = [
