@@ -23,13 +23,13 @@
     <div class="filters">
       <div class="filter-group">
         <div class="filter-header">
-          <strong>Product</strong>
+          <strong>Product / Service</strong>
           <div class="filter-controls">
-            <button class="btn-small" data-action="select-all" data-target="product">All</button>
-            <button class="btn-small" data-action="select-none" data-target="product">None</button>
+            <button class="btn-small" data-action="select-all" data-target="product-service">All</button>
+            <button class="btn-small" data-action="select-none" data-target="product-service">None</button>
           </div>
         </div>
-        <div id="product-filters" class="checkbox-group"></div>
+        <div id="product-service-filters" class="checkbox-group"></div>
       </div>
       
       <div class="filter-group">
@@ -52,6 +52,17 @@
           </div>
         </div>
         <div id="level-filters" class="checkbox-group"></div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-header">
+          <strong>Tags</strong>
+          <div class="filter-controls">
+            <button class="btn-small" data-action="select-all" data-target="tag">All</button>
+            <button class="btn-small" data-action="select-none" data-target="tag">None</button>
+          </div>
+        </div>
+        <div id="tag-filters" class="checkbox-group"></div>
       </div>
     </div>
   </details>
