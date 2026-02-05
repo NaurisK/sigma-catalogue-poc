@@ -7,30 +7,55 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Sigma Rules Catalogue PoC</h1>
+  <header>
+    <h1>Sigma Rules Catalogue</h1>
+    <p class="subtitle">Browse and search Sigma detection rules</p>
+  </header>
 
-  <div class="filters">
-    <div class="search-box">
-      <input id="q" placeholder="Search title, tags, logsource..." />
-    </div>
-    
-    <div class="filter-group">
-      <strong>Product:</strong>
-      <div id="product-filters" class="checkbox-group"></div>
-    </div>
-    
-    <div class="filter-group">
-      <strong>Category:</strong>
-      <div id="category-filters" class="checkbox-group"></div>
-    </div>
-    
-    <div class="filter-group">
-      <strong>Level:</strong>
-      <div id="level-filters" class="checkbox-group"></div>
-    </div>
+  <div class="search-box">
+    <input id="q" placeholder="Search title, tags, logsource..." />
   </div>
 
   <div id="stats"></div>
+
+  <details class="filter-section" open>
+    <summary>Filters</summary>
+    <div class="filters">
+      <div class="filter-group">
+        <div class="filter-header">
+          <strong>Product</strong>
+          <div class="filter-controls">
+            <button class="btn-small" data-action="select-all" data-target="product">All</button>
+            <button class="btn-small" data-action="select-none" data-target="product">None</button>
+          </div>
+        </div>
+        <div id="product-filters" class="checkbox-group"></div>
+      </div>
+      
+      <div class="filter-group">
+        <div class="filter-header">
+          <strong>Category</strong>
+          <div class="filter-controls">
+            <button class="btn-small" data-action="select-all" data-target="category">All</button>
+            <button class="btn-small" data-action="select-none" data-target="category">None</button>
+          </div>
+        </div>
+        <div id="category-filters" class="checkbox-group"></div>
+      </div>
+      
+      <div class="filter-group">
+        <div class="filter-header">
+          <strong>Level</strong>
+          <div class="filter-controls">
+            <button class="btn-small" data-action="select-all" data-target="level">All</button>
+            <button class="btn-small" data-action="select-none" data-target="level">None</button>
+          </div>
+        </div>
+        <div id="level-filters" class="checkbox-group"></div>
+      </div>
+    </div>
+  </details>
+
   <div id="results"></div>
 
   <script src="app.js"></script>
