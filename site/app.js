@@ -4,7 +4,8 @@ async function main() {
 
   const els = {
     q: document.getElementById("q"),
-    productServiceFilters: document.getElementById("product-service-filters"),
+    productFilters: document.getElementById("product-filters"),
+    serviceFilters: document.getElementById("service-filters"),
     categoryFilters: document.getElementById("category-filters"),
     levelFilters: document.getElementById("level-filters"),
     tagFilters: document.getElementById("tag-filters"),
@@ -14,12 +15,9 @@ async function main() {
 
   const uniq = (arr) => [...new Set(arr.filter(Boolean))].sort();
   
-  // Combine products and services
+  // Separate products and services
   const products = uniq(rules.map(r => r.logsource_product).filter(Boolean));
   const services = uniq(rules.map(r => r.logsource_service).filter(Boolean));
-  const productServices = [...products.map(p => ({value: p, type: 'product'})), 
-                           ...services.map(s => ({value: s, type: 'service'}))];
-  
   const categories = uniq(rules.map(r => r.logsource_category));
   const levels = uniq(rules.map(r => r.level));
   
@@ -28,16 +26,11 @@ async function main() {
   const cleanedTags = allTags.map(tag => tag.replace(/^attack\./, ''));
   const tags = uniq(cleanedTags);
 
-  // Create checkbox groups with optional type (for product/service color coding)
-  function createCheckboxes(container, values, name, withType = false) {
-    const items = withType ? values : values.map(v => ({value: v, type: null}));
-    
-    items.forEach(item => {
-      const val = item.value;
-      const type = item.type;
-      
+  // Create checkbox groups
+  function createCheckboxes(container, values, name, cssClass = '') {
+    values.forEach(val => {
       const label = document.createElement("label");
-      label.className = "checkbox-label" + (type ? ` checkbox-${type}` : '');
+      label.className = "checkbox-label" + (cssClass ? ` ${cssClass}` : '');
       
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
@@ -53,7 +46,8 @@ async function main() {
     });
   }
 
-  createCheckboxes(els.productServiceFilters, productServices, "product-service", true);
+  createCheckboxes(els.productFilters, products, "product", "checkbox-product");
+  createCheckboxes(els.serviceFilters, services, "service", "checkbox-service");
   createCheckboxes(els.categoryFilters, categories, "category");
   createCheckboxes(els.levelFilters, levels, "level");
   createCheckboxes(els.tagFilters, tags, "tag");
@@ -61,6 +55,9 @@ async function main() {
   // Handle select all/none buttons
   document.querySelectorAll('[data-action]').forEach(btn => {
     btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation(); // Prevent triggering the details toggle
+      
       const action = e.target.dataset.action;
       const target = e.target.dataset.target;
       const checkboxes = document.querySelectorAll(`input[name="${target}"]`);
@@ -119,22 +116,28 @@ async function main() {
 
   function apply() {
     const q = els.q.value.trim().toLowerCase();
-    const selectedProductServices = getCheckedValues("product-service");
+    const selectedProducts = getCheckedValues("product");
+    const selectedServices = getCheckedValues("service");
     const selectedCategories = getCheckedValues("category");
     const selectedLevels = getCheckedValues("level");
     const selectedTags = getCheckedValues("tag");
 
     const filtered = rules.filter(r => {
-      // FIXED: Stricter filtering - only pass if the value matches OR if no checkboxes are selected
-      
-      // Product/Service filter - match either product or service
-      if (selectedProductServices.length > 0) {
-        const hasProduct = r.logsource_product && selectedProductServices.includes(r.logsource_product);
-        const hasService = r.logsource_service && selectedProductServices.includes(r.logsource_service);
-        if (!hasProduct && !hasService) return false;
+      // Product filter
+      if (selectedProducts.length > 0) {
+        if (!r.logsource_product || !selectedProducts.includes(r.logsource_product)) {
+          return false;
+        }
       }
       
-      // Category filter - must match if category is selected
+      // Service filter
+      if (selectedServices.length > 0) {
+        if (!r.logsource_service || !selectedServices.includes(r.logsource_service)) {
+          return false;
+        }
+      }
+      
+      // Category filter
       if (selectedCategories.length > 0) {
         if (!r.logsource_category || !selectedCategories.includes(r.logsource_category)) {
           return false;
